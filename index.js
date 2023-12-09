@@ -21,12 +21,6 @@ app.use("/api/v1/DummyData", DummyRouter);
 app.use("/api/v1/Users", UserRouter);
 app.use("/api/v1/College", CollegeRouter);
 
-// app.get("/", async (req, res) => {
-//   let user = await UserModel.find();
-//   res.status(200).json({
-//     data: user,
-//   });
-// });
 
 app.use(globalErrHandler);
 

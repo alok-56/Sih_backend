@@ -138,7 +138,7 @@ const OtpSendCtrlForAdhar = async (req, res, next) => {
 
     let User = await AdharCardModel.findOne({ AdharNumber: AdharNumber });
     if (!User) {
-      return next(AppErr("User not found"));
+      return next(new AppErr("User not found"));
     }
 
     let otp = otpGenerator.generate(4, {
@@ -169,7 +169,6 @@ const OtpSendCtrlForAdhar = async (req, res, next) => {
 
 const getOwnProfile = async (req, res, next) => {
   try {
-    console.log(req.user)
     let user = await UserModel.findById(req.user);
     return res.status(200).json({
       staus: "success",

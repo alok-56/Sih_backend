@@ -68,7 +68,7 @@ const SigninCollege = async (req, res, next) => {
       token: Token,
     });
   } catch (error) {
-    return next(new AppErr(error.message), 500);
+    return next(new AppErr(error.message, 500));
   }
 };
 
@@ -82,7 +82,7 @@ const OtpSendCtrlForCollege = async (req, res, next) => {
 
     let User = await CollegeModel.findOne({ Email: Email });
     if (!User) {
-      return next(AppErr("User not found"));
+      return next(new AppErr("User not found", 500));
     }
 
     let otp = otpGenerator.generate(4, {
@@ -100,8 +100,8 @@ const OtpSendCtrlForCollege = async (req, res, next) => {
           otp: otp,
         });
       })
-      .catch((err) => {
-        return next(new AppErr(err, 500));
+      .catch((error) => {
+        return next(new AppErr(error.message, 500));
       });
   } catch (error) {
     return next(new AppErr(error.message, 500));

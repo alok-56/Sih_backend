@@ -19,6 +19,14 @@ app.use("/api/v1/DummyData", DummyRouter);
 app.use("/api/v1/Users", UserRouter);
 app.use("/api/v1/College", CollegeRouter);
 
+app.get("/",(req,res)=>{
+    res.status(200).json({
+        message:"alok"
+    })
+})
+
+
+
 app.use(globalErrHandler);
 
 const port = 8080;

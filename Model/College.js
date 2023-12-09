@@ -18,8 +18,8 @@ const CollegeSchema = new mongoose.Schema({
   State: {
     type: String,
   },
-  Password:{
-    type:String
+  Password: {
+    type: String,
   },
   Landmark: {
     type: String,

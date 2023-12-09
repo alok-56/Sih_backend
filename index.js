@@ -7,6 +7,7 @@ const DummyRouter = require("./Routes/DummyData");
 const globalErrHandler = require("./Middleware/GlobalError");
 const UserRouter = require("./Routes/Users");
 const CollegeRouter = require("./Routes/College");
+const UserModel = require("./Model/User");
 
 //------------------Middleware-------------------//
 
@@ -19,9 +20,10 @@ app.use("/api/v1/DummyData", DummyRouter);
 app.use("/api/v1/Users", UserRouter);
 app.use("/api/v1/College", CollegeRouter);
 
-app.get("/",(req,res)=>{
+app.get("/",async(req,res)=>{
+    let user=await UserModel.find()
     res.status(200).json({
-        message:"alok"
+        data:user
     })
 })
 

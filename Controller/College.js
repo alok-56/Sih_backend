@@ -112,7 +112,9 @@ const OtpSendCtrlForCollege = async (req, res, next) => {
 
 const UpdateDocuments = async (req, res, next) => {
   try {
+    console.log(req.user);
     let user = await CollegeModel.findById(req.user);
+    console.log(user);
     if (!user) {
       return next(new AppErr("User not found", 404));
     }
@@ -133,9 +135,26 @@ const UpdateDocuments = async (req, res, next) => {
 };
 
 //----------------------Get own Detils-----------------------------//
+const GetOwnDetails = async (req, res, next) => {
+  try {
+    let College = await CollegeModel.findById(req.user);
+    if (!College) {
+      return next(new AppErr("College not found", 500));
+    }
+
+    return res.status(200).json({
+      status: "success",
+      data: College,
+    });
+  } catch (error) {
+    return next(new AppErr(error.message, 500));
+  }
+};
 
 module.exports = {
   SignUpCollege,
   SigninCollege,
   OtpSendCtrlForCollege,
+  UpdateDocuments,
+  GetOwnDetails
 };

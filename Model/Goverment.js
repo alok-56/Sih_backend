@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const GovtSchema = new mongoose.Schema({
-  StateName: {
+  State: {
     type: String,
   },
   Email: {
@@ -9,6 +9,10 @@ const GovtSchema = new mongoose.Schema({
     required: true,
   },
   PhoneNumber: {
+    type: String,
+    required: true,
+  },
+  Password: {
     type: String,
     required: true,
   },

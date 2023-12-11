@@ -10,6 +10,7 @@ const IsLogin = async (req, res, next) => {
     return next(new AppErr("Invailed Token/Expired Token ", 404));
   }
   let userFound = await UserModel.findById(decoded.id);
+  console.log("user",userFound)
   if (!userFound) {
     return next(new AppErr("Invailed Token/Expired Token ", 404));
   }

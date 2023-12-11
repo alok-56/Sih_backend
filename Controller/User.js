@@ -165,6 +165,45 @@ const OtpSendCtrlForAdhar = async (req, res, next) => {
   }
 };
 
+//--------------------------Get Otp Digilocker------------------------------//
+
+const getOtpDigilocker = async (req, res, next) => {
+  try {
+    let { AdharNumber } = req.body;
+    if (!AdharNumber) {
+      return next(new AppErr("Adhar number required", 400));
+    }
+
+    let User = await DigiLokerModel.findOne({ AdharNumber: AdharNumber });
+    console.log(User)
+    if (!User) {
+      return next(new AppErr("User not found"));
+    }
+
+    let otp = otpGenerator.generate(4, {
+      upperCaseAlphabets: false,
+      specialChars: false,
+      lowerCaseAlphabets: false,
+      digits: true,
+    });
+
+    console.log(User.Email);
+    //---------Email Send---------------//
+    SendEmail(User.Email, otp)
+      .then((response) => {
+        return res.status(200).json({
+          staus: "success",
+          otp: otp,
+        });
+      })
+      .catch((err) => {
+        return next(new AppErr(err, 500));
+      });
+  } catch (error) {
+    return next(new AppErr(error.message, 500));
+  }
+};
+
 //----------------------------GetOwnProfile----------------------------------//
 
 const getOwnProfile = async (req, res, next) => {
@@ -184,4 +223,5 @@ module.exports = {
   LoginWithDigiLocker,
   OtpSendCtrlForAdhar,
   getOwnProfile,
+  getOtpDigilocker
 };

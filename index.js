@@ -8,6 +8,7 @@ const globalErrHandler = require("./Middleware/GlobalError");
 const UserRouter = require("./Routes/Users");
 const CollegeRouter = require("./Routes/College");
 const bodyParser = require("body-parser");
+const GovermentRouter = require("./Routes/Government");
 DbConnect();
 
 //------------------Middleware-------------------//
@@ -22,6 +23,7 @@ app.use(bodyParser.json());
 app.use("/api/v1/DummyData", DummyRouter);
 app.use("/api/v1/Users", UserRouter);
 app.use("/api/v1/College", CollegeRouter);
+app.use("/api/v1/Government", GovermentRouter);
 
 app.use(globalErrHandler);
 

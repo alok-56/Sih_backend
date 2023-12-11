@@ -27,9 +27,12 @@ const UserSchema = new mongoose.Schema({
   LoginType: {
     type: String,
   },
-  Application: {
-    type: Array,
-  },
+  Application: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Application",
+    },
+  ],
   Tickets: {
     type: Array,
   },

@@ -6,6 +6,10 @@ const {
   GetOwnSchlorship,
   GetSingleSchlorship,
   GetAllCollege,
+  VerifyCollege,
+  GetAllownVerifiedcollege,
+  GetAllSchlorship,
+  GetSingleSchlorshipbyAll,
 } = require("../Controller/Government");
 const IsLogin = require("../Middleware/IsGovt");
 const IsGovt = require("../Middleware/IsGovt");
@@ -20,4 +24,8 @@ GovermentRouter.route("/getSingleSchlorship/:id").get(
   GetSingleSchlorship
 ); 
 GovermentRouter.route("/getAllcollege").get(IsGovt,GetAllCollege)
+GovermentRouter.route("/VerifyCollege").post(IsGovt,VerifyCollege)
+GovermentRouter.route("/Verified/College").get(IsGovt,GetAllownVerifiedcollege)
+GovermentRouter.route("/AllSchlorship").get(GetAllSchlorship)
+GovermentRouter.route("/AllSchlorship/:id").get(GetSingleSchlorshipbyAll)
 module.exports = GovermentRouter;

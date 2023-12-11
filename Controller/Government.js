@@ -92,7 +92,7 @@ const CreateSchlorship = async (req, res, next) => {
 //-----------------Get Own schlorsip-----------------//
 const GetOwnSchlorship = async (req, res, next) => {
   try {
-    let schlorship = await SchlorshipModel.find({governmentId:req.user});
+    let schlorship = await SchlorshipModel.find({ governmentId: req.user });
     return res.status(200).json({
       status: "success",
       data: schlorship,
@@ -115,21 +115,86 @@ const GetSingleSchlorship = async (req, res, next) => {
   }
 };
 
+//--------------------Get All Schlorship--------------------//
+const GetAllSchlorship = async (req, res, next) => {
+  try {
+    let schlorship = await SchlorshipModel.find();
+    return res.status(200).json({
+      status: "success",
+      data: schlorship,
+    });
+  } catch (error) {
+    return next(new AppErr(error.message, 500));
+  }
+};
+
 //--------------------Get All colleges------------------//
 const GetAllCollege = async (req, res, next) => {
   try {
     let college = await CollegeModel.find();
     return res.status(200).json({
-        status:"success",
-        data:college
-      })
+      status: "success",
+      data: college,
+    });
   } catch (error) {
     return next(new AppErr(error.message, 500));
   }
- 
+};
+
+//------------------Get Single Schlorship by all-----------//
+const GetSingleSchlorshipbyAll = async (req, res, next) => {
+  try {
+    let schlor = await SchlorshipModel.findOne({ _id: req.params.id });
+    return res.status(200).json({
+      status: "success",
+      data: schlor,
+    });
+  } catch (error) {
+    return next(new AppErr(error.message, 500));
+  }
+};
+
+//------------------Verfiy College-----------------------//
+const VerifyCollege = async (req, res, next) => {
+  try {
+    let { CollegeId } = req.body;
+    //-------------------Get College Id--------------------//
+    let college = await CollegeModel.findById(CollegeId);
+    let govt = await GovtModel.findById(req.user);
+    if (!college) {
+      return next(new AppErr("Couldn't find College", 404));
+    }
+    //------------------- push Govt id---------------------//
+    college.VerfiedStateId.push(req.user);
+
+    //--------------------push State name--------------------//
+    college.VerfiedState.push(govt.State);
+
+    await college.save();
+
+    return res.status(200).json({
+      status: "success",
+      data: college,
+    });
+  } catch (error) {
+    return next(new AppErr(error.message, 500));
+  }
 };
 
 //-------------------Get All Own verified College------------------//
+const GetAllownVerifiedcollege = async (req, res, next) => {
+  try {
+    let college = await CollegeModel.find({
+      VerfiedStateId: req.user,
+    });
+    return res.status(200).json({
+      status: "success",
+      data: college,
+    });
+  } catch (error) {
+    return next(new AppErr(error.message, 500));
+  }
+};
 
 module.exports = {
   SignupGovenment,
@@ -137,5 +202,9 @@ module.exports = {
   CreateSchlorship,
   GetOwnSchlorship,
   GetSingleSchlorship,
-  GetAllCollege
+  GetAllCollege,
+  VerifyCollege,
+  GetAllownVerifiedcollege,
+  GetAllSchlorship,
+  GetSingleSchlorshipbyAll,
 };

@@ -208,7 +208,7 @@ const getOtpDigilocker = async (req, res, next) => {
 
 const getOwnProfile = async (req, res, next) => {
   try {
-    let user = await UserModel.findById(req.user);
+    let user = await UserModel.findById(req.user).populate('Application');
     return res.status(200).json({
       staus: "success",
       data: user,

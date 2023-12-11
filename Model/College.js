@@ -49,6 +49,9 @@ const CollegeSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  VerfiedStateId:{
+    type:Array
+  },
   VerfiedState: {
     type: Array,
   },

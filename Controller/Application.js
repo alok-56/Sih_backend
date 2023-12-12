@@ -68,14 +68,12 @@ const CreateApplication = async (req, res, next) => {
     schlorship.Application.push(application._id);
     await schlorship.save();
     let college = await CollegeModel.findById(CollegeId);
+    if (!college) {
+      return next(new App());
+    }
     //-------------If not verified generaate tickets---------//
     if (!college.VerfiedState.includes(GovtId)) {
       SendNotification(college.Email)
-        .then((response) => {
-          return res.status(200).json({
-            staus: "success",
-          });
-        })
         .catch((err) => {
           return next(new AppErr(err, 500));
         });
@@ -119,15 +117,12 @@ const UpdateApplication = async (req, res, next) => {
       },
       { mew: true }
     );
-    SendEmailUpdate(application.Email, application.StudentName, Status)
-      .then((response) => {
-        return res.status(200).json({
-          staus: "success",
-        });
-      })
-      .catch((err) => {
+    console.log(application.Email);
+    SendEmailUpdate(application.Email, application.StudentName, Status).catch(
+      (err) => {
         return next(new AppErr(err, 500));
-      });
+      }
+    );
 
     return res.status(200).json({
       status: "success",

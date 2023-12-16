@@ -3,6 +3,7 @@ const GenerateToken = require("../Global/GenerateToken");
 const SendEmail = require("../Global/SendEmail");
 const CollegeModel = require("../Model/College");
 const otpGenerator = require("otp-generator");
+const InstitudeDummyModel = require("../Model/InstituteCode");
 
 //-----------------------Signup College--------------------------//
 
@@ -151,10 +152,91 @@ const GetOwnDetails = async (req, res, next) => {
   }
 };
 
+//------------------------LOgin with Acice code------------------------//
+
+const LoginwithAcise = async (req, res, next) => {
+  try {
+    let { InstituteCode } = req.body;
+    if (!InstituteCode) {
+      return next(new AppErr("Institude code is required", 500));
+    }
+
+    let college = await CollegeModel.findOne({
+      InstituteCode: InstituteCode,
+    });
+    let Institute = await InstitudeDummyModel.findOne({
+      InstituteCode: InstituteCode,
+    });
+    if (college === null) {
+      let createCollege = await CollegeModel.create({
+        Email: Institute.Email,
+        PhoneNumber: Institute.PhoneNumber,
+        City: Institute.City,
+        distict: Institute.distict,
+        State: Institute.State,
+        Landmark: "Local",
+        CollgeName: Institute.CollgeName,
+        CollegProve: Institute.CollegProve,
+        AicteDoc: Institute.AicteDoc,
+        UgcDoc: Institute.UgcDoc,
+        InstituteCode: Institute.InstituteCode,
+        isVerified: "true",
+      });
+
+      let token = GenerateToken(createCollege._id);
+      return res.status(200).json({
+        message: "Success",
+        data: createCollege,
+        token: token,
+      });
+    } else {
+      let token = GenerateToken(college._id);
+      return res.status(200).json({
+        message: "Success",
+        data: college,
+        token: token,
+      });
+    }
+  } catch (error) {
+    return next(new AppErr(error.message, 500));
+  }
+};
+
+const SendOtpAcicee = async (req, res, next) => {
+  try {
+    let { InstituteCode } = req.body;
+    if (!InstituteCode) {
+      return next(new AppErr("InstituteCode is required"), 404);
+    }
+    let email = await InstitudeDummyModel.findOne({
+      InstituteCode: InstituteCode,
+    });
+
+    let otp = otpGenerator.generate(4, {
+      upperCaseAlphabets: false,
+      specialChars: false,
+      lowerCaseAlphabets: false,
+      digits: true,
+    });
+
+    console.log(email);
+
+    SendEmail(email.Email, otp).then((response) => {
+      return res.status(200).json({
+        staus: "success",
+        otp: otp,
+      });
+    });
+  } catch (error) {
+    return next(new AppErr(error.message, 500));
+  }
+};
 module.exports = {
   SignUpCollege,
   SigninCollege,
   OtpSendCtrlForCollege,
   UpdateDocuments,
   GetOwnDetails,
+  LoginwithAcise,
+  SendOtpAcicee,
 };

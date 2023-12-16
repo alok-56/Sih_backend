@@ -1,7 +1,11 @@
 const mongoose = require("mongoose");
 
-const CollegeSchema = new mongoose.Schema({
+const InstituteSchema = new mongoose.Schema({
   Email: {
+    type: String,
+    required: true,
+  },
+  InstituteCode: {
     type: String,
     required: true,
   },
@@ -16,12 +20,6 @@ const CollegeSchema = new mongoose.Schema({
     type: String,
   },
   State: {
-    type: String,
-  },
-  Password: {
-    type: String,
-  },
-  InstituteCode: {
     type: String,
   },
   Landmark: {
@@ -60,5 +58,5 @@ const CollegeSchema = new mongoose.Schema({
   },
 });
 
-const CollegeModel = mongoose.model("College", CollegeSchema);
-module.exports = CollegeModel;
+const InstitudeDummyModel = mongoose.model("InstitudeDummy", InstituteSchema);
+module.exports = InstitudeDummyModel;

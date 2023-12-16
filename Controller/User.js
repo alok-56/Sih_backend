@@ -175,7 +175,7 @@ const getOtpDigilocker = async (req, res, next) => {
     }
 
     let User = await DigiLokerModel.findOne({ AdharNumber: AdharNumber });
-    console.log(User)
+    console.log(User);
     if (!User) {
       return next(new AppErr("User not found"));
     }
@@ -208,7 +208,7 @@ const getOtpDigilocker = async (req, res, next) => {
 
 const getOwnProfile = async (req, res, next) => {
   try {
-    let user = await UserModel.findById(req.user).populate('Application');
+    let user = await UserModel.findById(req.user).populate("Application");
     return res.status(200).json({
       staus: "success",
       data: user,
@@ -223,5 +223,5 @@ module.exports = {
   LoginWithDigiLocker,
   OtpSendCtrlForAdhar,
   getOwnProfile,
-  getOtpDigilocker
+  getOtpDigilocker,
 };

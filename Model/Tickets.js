@@ -8,6 +8,9 @@ const TicketSchema = new mongoose.Schema(
     GeneratedFor: {
       type: String,
     },
+    State: {
+      type: String,
+    },
     title: {
       type: String,
     },
@@ -23,3 +26,6 @@ const TicketSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
+
+const TicketModel = mongoose.model("Ticket", TicketSchema);
+module.exports = TicketModel;

@@ -12,7 +12,6 @@ const CreateApplication = async (req, res, next) => {
   try {
     let {
       GovtId,
-      CollegeId,
       SchlorshipId,
       StudentName,
       Email,
@@ -40,6 +39,7 @@ const CreateApplication = async (req, res, next) => {
 
     //--------------Checking users in application--------------//
     let userFound = await ApplicationModel.findOne({ StudentId: req.user });
+    console.log(userFound);
     if (userFound) {
       return next(new AppErr("User Already Resisted", 404));
     }
@@ -67,17 +67,17 @@ const CreateApplication = async (req, res, next) => {
     await users.save();
     schlorship.Application.push(application._id);
     await schlorship.save();
-    let college = await CollegeModel.findById(CollegeId);
-    if (!college) {
-      return next(new App());
-    }
-    //-------------If not verified generaate tickets---------//
-    if (!college.VerfiedState.includes(GovtId)) {
-      SendNotification(college.Email)
-        .catch((err) => {
+    let college = await CollegeModel.findOne({
+      CollgeName: CollegeName,
+    });
+    if (college) {
+      if (!college.VerfiedState.includes(GovtId)) {
+        SendNotification(college.Email).catch((err) => {
           return next(new AppErr(err, 500));
         });
+      }
     }
+    //-------------If not verified generaate tickets---------//
 
     return res.status(200).json({
       status: "success",
@@ -134,23 +134,27 @@ const UpdateApplication = async (req, res, next) => {
 };
 
 //----------Get All Application by state if college verfified -------//
-const GetallApplicationCollege_verified = async () => {
+const GetallApplicationCollegeverified = async (req, res, next) => {
   try {
     let college = await CollegeModel.findById(req.user);
     if (!college) {
       return next(new AppErr("College not found", 404));
     }
+    console.log(college);
 
     let application = await ApplicationModel.find({
-      CollegeId: college._id,
+      CollegeName: college.CollgeName,
       collegeVerified: "Pending",
     });
+    console.log("alok", application);
 
     return res.status(200).json({
       status: "success",
       data: application,
     });
-  } catch (error) {}
+  } catch (error) {
+    return next(new AppErr(error.message, 500));
+  }
 };
 
 //----------Get All Application by state if college not verfified --------//
@@ -274,6 +278,7 @@ const GetallVerfied = async (req, res, next) => {
     return next(new AppErr(error.message, 500));
   }
 };
+
 module.exports = {
   CreateApplication,
   UpdateApplication,
@@ -282,4 +287,5 @@ module.exports = {
   GetallapplicationStage2,
   GetallapplicationStage3,
   GetallVerfied,
+  GetallApplicationCollegeverified,
 };

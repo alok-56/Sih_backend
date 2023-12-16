@@ -81,8 +81,8 @@ const OtpSendCtrlForCollege = async (req, res, next) => {
     }
 
     let User = await CollegeModel.findOne({ Email: Email });
-    if (!User) {
-      return next(new AppErr("User not found", 500));
+    if (User) {
+      return next(new AppErr("User already present", 500));
     }
 
     let otp = otpGenerator.generate(4, {
@@ -156,5 +156,5 @@ module.exports = {
   SigninCollege,
   OtpSendCtrlForCollege,
   UpdateDocuments,
-  GetOwnDetails
+  GetOwnDetails,
 };

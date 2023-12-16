@@ -9,6 +9,7 @@ const {
   GetallapplicationStage2,
   GetallapplicationStage3,
   GetallVerfied,
+  GetallApplicationCollegeverified,
 } = require("../Controller/Application");
 const IsCollege = require("../Middleware/Iscollege");
 const IsGovt = require("../Middleware/IsGovt");
@@ -32,5 +33,8 @@ ApplicationRouter.route("/Get/Application/Stage3").get(
   GetallapplicationStage3
 );
 ApplicationRouter.route("/Get/Application/verified").get(IsGovt, GetallVerfied);
+ApplicationRouter.route("/Get/Application/college/pending").post(IsCollege,GetallApplicationCollegeverified);
+
+
 
 module.exports = ApplicationRouter;

@@ -3,6 +3,7 @@ const GenerateToken = require("../Global/GenerateToken");
 const CollegeModel = require("../Model/College");
 const GovtModel = require("../Model/Goverment");
 const SchlorshipModel = require("../Model/Schlorship");
+const UserModel = require("../Model/User");
 
 //--------------Signup college----------------//
 
@@ -196,6 +197,18 @@ const GetAllownVerifiedcollege = async (req, res, next) => {
   }
 };
 
+//----------------Recommended---------------------------//
+const GetRecommended = async (req, res, next) => {
+  let user = await UserModel.findById(req.user);
+  let schlor = await SchlorshipModel.find({
+    State: user.State,
+  });
+  return res.status(200).json({
+    status: "Success",
+    data: schlor,
+  });
+};
+
 module.exports = {
   SignupGovenment,
   LoginGovernment,
@@ -207,4 +220,5 @@ module.exports = {
   GetAllownVerifiedcollege,
   GetAllSchlorship,
   GetSingleSchlorshipbyAll,
+  GetRecommended,
 };

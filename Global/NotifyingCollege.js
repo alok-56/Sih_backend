@@ -1,6 +1,6 @@
 const nodemailer = require("nodemailer");
 
-const SendNotification = async (email, otp) => {
+const SendNotification = async (email,) => {
   const mailOptions = {
     from: "easypeasy11746@gmail.com",
     to: email,

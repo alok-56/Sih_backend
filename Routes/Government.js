@@ -11,6 +11,7 @@ const {
   GetAllSchlorship,
   GetSingleSchlorshipbyAll,
   GetRecommended,
+  Notify,
 } = require("../Controller/Government");
 const IsGovt = require("../Middleware/IsGovt");
 const IsLogin = require("../Middleware/IsLogin");
@@ -33,4 +34,5 @@ GovermentRouter.route("/Verified/College").get(
 GovermentRouter.route("/AllSchlorship").get(GetAllSchlorship);
 GovermentRouter.route("/AllSchlorship/:id").get(GetSingleSchlorshipbyAll);
 GovermentRouter.route("/Recommded").get(IsLogin,GetRecommended);
+GovermentRouter.route("/Notify").get(Notify);
 module.exports = GovermentRouter;

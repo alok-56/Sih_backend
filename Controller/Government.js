@@ -1,5 +1,6 @@
 const AppErr = require("../Global/Error");
 const GenerateToken = require("../Global/GenerateToken");
+const NotifyCollege = require("../Global/NotifyCollege");
 const CollegeModel = require("../Model/College");
 const GovtModel = require("../Model/Goverment");
 const SchlorshipModel = require("../Model/Schlorship");
@@ -209,6 +210,22 @@ const GetRecommended = async (req, res, next) => {
   });
 };
 
+//--------------New Schlorship notification---------------------//
+const Notify = async (req, res, next) => {
+  try {
+    let { Email, StudenetName, Application, status, CollegeName } = req.body;
+    NotifyCollege(Email, StudenetName, Application, status, CollegeName)
+      .then((ress) => {
+        return res.status(200).json({
+          status: "success",
+        });
+      })
+      
+  } catch (error) {
+    return next(new AppErr(error.message,500))
+  }
+};
+
 module.exports = {
   SignupGovenment,
   LoginGovernment,
@@ -221,4 +238,5 @@ module.exports = {
   GetAllSchlorship,
   GetSingleSchlorshipbyAll,
   GetRecommended,
+  Notify,
 };
